@@ -4,7 +4,12 @@ In this repo are 2 json files. One file has a list of invoices and the other fil
 
 The goal is to build an interface using Rails to view these invoices. Here is an indicative mockup of how the interface should be.
 
+### Invoice List
+
 ![Alt text](https://raw.githubusercontent.com/LArunkumar/axb_technical_test/master/invoicelist.png "Invoice List")
+
+### Invoice View
+
 ![Alt text](https://raw.githubusercontent.com/LArunkumar/axb_technical_test/master/invoice-view.png "Invoice View")
 
 If you have any questions, call me.
