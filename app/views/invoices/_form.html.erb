@@ -1,0 +1,111 @@
+
+        <div class="container">
+          <div class="row"> 
+            <%= form_with(model: invoice, local: true, id: "submit_collection") do |form| %>
+            <% if invoice.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(invoice.errors.count, "error") %> prohibited this invoice from being saved:</h2>
+
+              <ul>
+                <% invoice.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+            <% end %>
+            <div class="form-group">        
+             <h2><%= invoice.new_record? ? "New Bill" : "Add Collection"%></h2>     
+           </div>
+           <% if invoice.new_record? %> 
+           <div class="form-group">        
+            <%= form.label :reference, "Reference:" %>       
+            <%= form.text_field :reference,class: "form-control", required: true %>       
+          </div>
+
+
+          <div class="form-group">        
+            <%= form.label :brand_manager, "Brand Manager:" %>       
+            <%= form.text_field :brand_manager,class: "form-control", required: true%>       
+          </div>
+
+
+          <!-- <div class="form-group">    
+            <%#= form.label :invoice_date, "Invoice Date:"%><br>   
+            <%#= form.date_select :invoice_date, class: "form-control", required: true %>    
+          </div>
+       -->
+
+          <div class="form-group">
+            <%= form.label :amount, "Amount:" %>    
+            <%= form.text_field :amount, class: "form-control" , required: true, style: "" %> 
+          </div>
+
+
+          <div class="form-group">
+            <%= form.label :narration, "Narration:" %>    
+            <%= form.text_field :narration, class: "form-control", required:true %> 
+          </div>
+
+
+          <div class="form-group">
+            <%= form.label :customer_name, "Customer Name:"%>   
+            <%= form.text_field :customer_name, class: "form-control" %>
+          </div>   
+
+          <% else %>
+
+          <div class="form-group">
+            <div class="list-group">  
+              <h5 class="list-group-item reference"><%= invoice.reference %></h5> 
+              <h5 class="list-group-item"><%= @invoice.brand_manager %></h5>
+            </div>       
+          </div>
+          <%= form.hidden_field :from_page, value: from_page%>
+          <div class="form-group">       
+            <%= form.text_field :collection_amount, class: "form-control collection_check", required: true, placeholder: "Enter the amount"%> 
+          </div>
+
+          <% end %>
+
+          <footer>    
+            <button type="submit" class="btn btn-primary btn-color btn-bg-color btn-xs col-xs-4 collection_button submit_collection">
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Submit
+            </button>
+            <a type="button" class="btn btn-danger btn-color btn-bg-color btn-xs col-xs-4" href="<%=invoices_path%>">
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Cancel
+            </a>    
+          </footer>  
+          <% end %>  
+        </div>
+        </div>
+
+
+      <script type="text/javascript">
+          var amount = <%= raw @invoice.pending_amount %>
+        $("#submit_collection").submit(function(e){
+
+          if ($(".collection_check").length != 0 ){
+          var col_original_value =  $(".collection_check").val();  
+                var col_val = Math.round($(".collection_check").val());
+                if ((isNaN(col_val) == false) && (isPositive(col_val) == true) && (col_original_value <= amount)){
+                  $("#submit_collection").submit();      
+                }else{
+                  e. preventDefault();
+                  alert("Pending amount is"+" "+amount+". Please enter the valid amount");
+                }
+          }else if($("#invoice_amount").length != 0){ 
+
+            var amount_val = Math.round($("#invoice_amount").val());
+                if ((isNaN(amount_val) == false) && (isPositive(amount_val) == true)){
+                  $("#submit_collection").submit();      
+                }else{
+                  e. preventDefault();
+                  alert("Please enter the valid amount");
+                }
+          }
+        });
+
+        function isPositive(n) {
+              return /^[0-9]+$/.test(n);
+          }
+      </script>

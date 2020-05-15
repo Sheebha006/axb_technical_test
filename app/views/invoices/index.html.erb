@@ -1,0 +1,74 @@
+
+  <div class= "container">
+    
+    <% if @status == "pending_bills" %>
+    <h2>PENDING BILLS</h2>
+    <% elsif @status == "collected_bills" %>
+    <h2>COLLECTED BILLS</h2>
+    <%else %>
+    <h2>INVOICE LIST</h2>
+    <% end %>
+    <br>
+
+    <div class="btn-toolbar text-center well">
+      <a type="button" class="btn btn-success btn-color btn-bg-color btn-sm col-xs-2 margin-left" href="<%= new_invoice_path%>">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add a new bill
+      </a>
+      <a type="button" class="btn btn-success btn-color btn-bg-color btn-sm col-xs-2 margin-left" href="<%= invoices_path(status: 'pending_bills')%>">
+        <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Show Pending Bills
+      </a>
+      <a type="button" class="btn btn-success btn-color btn-bg-color btn-sm col-xs-2 margin-left" href="<%= invoices_path(status: 'collected_bills')%>">
+        <span class="glyphicon glyphicon-time" aria-hidden="true"></span> Show Collected Bills
+      </a>
+      <a type="button" class="btn btn-success btn-color btn-bg-color btn-sm col-xs-2 margin-left" href="<%= invoices_path()%>">
+        <span class="glyphicon glyphicon-time" aria-hidden="true"></span> Show all
+      </a>     
+    </div>
+
+
+    <br>
+    <div class="table-responsive">
+      <table class= "table" id="customers">
+        <thead>
+          <tr>
+            <th>Reference</th>
+            <th>Invoice date</th>
+            <th>Customer</th>
+            <th>Brand manager</th>
+            <th>Narration</th>
+            <th>Amount</th>      
+            <th>Total Collection</th>      
+            <th>Balance Due</th>      
+            <th>Button to add a collection</th>      
+            <!-- <th colspan="3"></th> -->
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @invoices_list.order(invoice_date: :desc).each do |invoice| %>     
+          <tr>
+            <td><%= link_to "#{invoice.reference}".html_safe, invoice %></td>
+            <td><%= invoice.invoice_date %></td>
+            <td><%= invoice.customer_name %></td>
+            <td><%= invoice.brand_manager %></td>
+            <td><%= invoice.narration %></td>       
+            <td><%= invoice.amount %></td>        
+            <td><%= invoice.try(:total_collection_amount)%></td>        
+            <td><%= invoice.pending_amount %></td>        
+            <td>
+              <% if invoice.pending_amount > 0.0 %>
+              <a type="button" class="btn btn-primary btn-sm col-xs-2 collection_button" href="<%=edit_invoice_path(id: invoice.id, from_page: "index")%>">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Collection
+              </a>
+              <% else %>
+              <%= "Paid" %>
+              <% end %>
+            </td> 
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <br>
+
+
+      

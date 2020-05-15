@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  brand_manager: MyString
+  narration: MyString
+  invoice_date: 2020-05-12
+  amount: 1.5
+  customer_name: MyString
+
+two:
+  brand_manager: MyString
+  narration: MyString
+  invoice_date: 2020-05-12
+  amount: 1.5
+  customer_name: MyString

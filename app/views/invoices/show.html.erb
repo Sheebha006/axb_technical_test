@@ -1,0 +1,66 @@
+      
+<div class="container">
+  <div class="row">    
+    <div class="form-group">        
+     <h2>Invoice View</h2>     
+   </div>
+   <div class="list-group">  
+    <h5 class="list-group-item reference"><%= link_to "#{@invoice.reference}".html_safe, invoices_path %></h5>
+    <h5 class="list-group-item"><%= @invoice.customer_name %></h5>
+    <h5 class="list-group-item"><%= @invoice.brand_manager %>
+    </h5>
+    <h5 class="list-group-item narration"><%= @invoice.narration %></h5>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table" id="customers">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Event</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td><%= @invoice.invoice_date %></td>
+          <td><%= "New Invoice" %></td>
+          <td><%= @invoice.try(:amount).blank? ? 0.0 : @invoice.try(:amount).try(:to_f) %></td> 
+        </tr>
+        <% collections = @invoice.try(:collections)%>
+
+        <% unless collections.blank? %> 
+        <% subt = @invoice.try(:amount) - collections.try(:sum, :amount) %>   
+        <% collections.try(:each) do |collection| %>
+        <tr>
+          <td><%= collection.collection_date %></td>
+          <td><%= "Collection" %></td>
+          <td><%= "- #{collection.amount}" %></td>        
+        </tr>
+        <% end %>
+        <% end %>
+        <tr>
+          <td></td>
+          <td><%="Balance"%></td>
+          <td><% if subt %>
+            <%= subt.try(:to_f)%>
+            <% else %>
+            <%= @invoice.try(:amount).blank? ? 0.0 : @invoice.try(:amount).try(:to_f) %>
+            <% end %>
+          </td>        
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <% if @invoice.pending_amount > 0.0 %>
+  <footer>
+    <a type="button" class="btn btn-primary btn-sm col-xs-2 collection_button" href="<%=edit_invoice_path(id: @invoice.id, from_page: "show")%>">
+      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Collection
+    </a>       
+    <% end %>    
+  </footer>
+</div>
+</div>
+
+
